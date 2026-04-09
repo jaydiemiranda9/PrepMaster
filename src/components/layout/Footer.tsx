@@ -13,6 +13,7 @@ const COMPANY_LINKS = [
   { label: "About PrepMaster", href: "/about" },
   { label: "Contact Us", href: "/contact" },
   { label: "Blog & Study Tips", href: "/blog" },
+  { label: "Trust & Security", href: "/trust" },
 ];
 
 const LEGAL_LINKS = [

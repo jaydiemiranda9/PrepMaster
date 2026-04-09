@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PrepMaster
 
-## Getting Started
+Digital storefront for LSAT, NCLEX, CLEP and other exam prep study guides. Built with Next.js 16, Stripe Checkout, Vercel Blob for digital downloads, Upstash Redis for time-limited token delivery, and Resend for transactional email.
 
-First, run the development server:
+## Stack
+
+- **Framework**: Next.js 16 (App Router, Turbopack) + React 19
+- **Styling**: Tailwind CSS v4, shadcn/ui, Base UI
+- **Payments**: Stripe Checkout + webhooks
+- **Storage**: Vercel Blob (product files), Upstash Redis (download tokens + order cache)
+- **Email**: Resend + React Email
+- **Content**: MDX blog via `next-mdx-remote` + `gray-matter`
+
+## Quick start
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in secrets
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See [`.env.example`](./.env.example) for the full list. Required for production:
 
-## Learn More
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL (used for Stripe redirects and sitemaps) |
+| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Stripe Checkout + webhook signing |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client-side Stripe |
+| `RESEND_API_KEY` | Transactional email |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | Upstash Redis for download tokens |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob read/write |
 
-To learn more about Next.js, take a look at the following resources:
+## Project layout
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/              # App Router pages + API routes
+│   └── api/
+│       ├── download/[token]/    # signed download handler
+│       ├── newsletter/          # newsletter signup
+│       ├── order/[sessionId]/   # order lookup
+│       └── stripe/              # checkout-session + webhook
+├── components/       # home, layout, products, CRO, UI primitives
+├── data/             # products.ts, reviews.ts (static catalog)
+├── lib/              # redis, stripe, resend, blog, utils
+emails/               # React Email templates
+content/              # MDX blog posts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run start` | Run production server |
+| `npm run lint` | ESLint |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploys to [Vercel](https://vercel.com). After linking the project, set the environment variables above in the Vercel dashboard and point the Stripe webhook at `https://<your-domain>/api/stripe/webhook`.

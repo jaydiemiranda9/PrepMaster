@@ -8,6 +8,7 @@ import { StarRating } from "@/components/products/StarRating";
 import ProductCard from "@/components/products/ProductCard";
 import AddToCartButton from "@/components/products/AddToCartButton";
 import BundleCardInline from "@/components/products/BundleCardInline";
+import ProductSalesSection from "@/components/products/ProductSalesSection";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Check, Download, FileText, Shield } from "lucide-react";
@@ -188,6 +189,10 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
           </section>
         )}
+
+        {/* Long-form sales section — every product */}
+        <ProductSalesSection product={product} />
+
 
         {/* Related products */}
         {related.length > 0 && (

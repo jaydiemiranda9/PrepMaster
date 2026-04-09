@@ -6,16 +6,22 @@ import FeaturedProducts from "@/components/home/FeaturedProducts";
 import BundlesSection from "@/components/home/BundlesSection";
 import ReviewsSection from "@/components/home/ReviewsSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
+import MethodSection from "@/components/home/MethodSection";
+import StatsStrip from "@/components/home/StatsStrip";
+import FaqSection from "@/components/home/FaqSection";
 
 export default function HomePage() {
   return (
     <SiteLayout>
       <Hero />
-      <CategoryTiles />
       <TrustBar />
+      <CategoryTiles />
+      <MethodSection />
       <FeaturedProducts />
+      <StatsStrip />
       <BundlesSection />
       <ReviewsSection />
+      <FaqSection />
       <NewsletterSection />
     </SiteLayout>
   );
